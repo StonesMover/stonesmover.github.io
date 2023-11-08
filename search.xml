@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>crontab</title>
+    <url>/2023/08/01/crontab/</url>
+    <content><![CDATA[<p>linux crontab 计划任务</p>
+<p><strong>安装crontab</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install crontabs </span><br></pre></td></tr></table></figure>
+
+<!--more-->
+
+<p>查看定时任务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置定时任务</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>查看crontab状态</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl status crond.service</span><br></pre></td></tr></table></figure>
+
+<p><strong>启动crontab</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl start crond.service</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭crontab</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl stop crond.service</span><br></pre></td></tr></table></figure>
+
+<p><strong>重启crontab</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl restart crond.service</span><br></pre></td></tr></table></figure>
+
+
+
+<p>每分钟执行一次</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改/添加定时任务</span></span><br><span class="line">crontab -e</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每分钟把hello world字符串写入/home/string.txt文件中</span></span><br><span class="line">* * * * * echo &quot;hello world&quot; &gt;&gt; /home/string.txt</span><br><span class="line">更多案例</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改/添加定时任务</span></span><br><span class="line">crontab -e</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每天3点执行</span></span><br><span class="line">* 3 * * * 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每天18点30分执行</span></span><br><span class="line">30 18 * * * 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每个月的1号的12点15分执行</span></span><br><span class="line">15 12 1 * *  执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每年的3月1号的11点45分执行</span></span><br><span class="line">45 11 1 3 * 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每周三的16点30分执行</span></span><br><span class="line">30 16 * * 3 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第1列表示分钟1～59 每分钟用或者 /1表示</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第2列表示小时1～23（0表示0点）</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第3列表示日期1～31</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第4列表示月份1～12</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第5列标识号星期0～6（0表示星期天）</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第6列要运行的命令</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>crontab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>帆软使用API接口数据</title>
+    <url>/2023/08/01/%E5%B8%86%E8%BD%AF%E4%BD%BF%E7%94%A8API%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<p>1、<a href="https://help.fanruan.com/finereport/doc-view-745.html">使用ecilpse 打开FineReport工程 </a></p>
+<p>2、<a href="https://help.fanruan.com/finereport/doc-view-650.html">程序数据集</a></p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.fr.data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONObject;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONUtil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeatherInfo</span> <span class="keyword">extends</span> <span class="title class_">SimpleTableData</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 初始化列头</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String[] initColumnNames() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;wea&quot;</span>, <span class="string">&quot;win&quot;</span>, <span class="string">&quot;win_speed&quot;</span>, <span class="string">&quot;tem_day&quot;</span>, <span class="string">&quot;tem_night&quot;</span> &#125;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 加载行列数据</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> List&lt;Object[]&gt; loadData() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 访问免费天气API 接口 获取天气数据</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;https://v0.yiketianqi.com/free/day?appid=36978295&amp;appsecret=4tAvI4fv&amp;unescape=1&quot;</span>;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 获取返回值</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">Content</span> <span class="operator">=</span> HttpUtil.get(url);</span><br><span class="line">		<span class="type">JSONObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> JSONUtil.parseObj(Content);</span><br><span class="line"></span><br><span class="line">		<span class="type">String</span> <span class="variable">wea</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;wea&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">win</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win&quot;</span>).toString();</span><br><span class="line">		<span class="type">String</span> <span class="variable">win_speed</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win_speed&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_day</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_day&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_night</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_night&quot;</span>);</span><br><span class="line"></span><br><span class="line">		ArrayList&lt;Object[]&gt; valueList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">		valueList.add(<span class="keyword">new</span> <span class="title class_">Object</span>[] &#123; wea, win, win_speed, tem_day, tem_night &#125;);</span><br><span class="line">		<span class="keyword">return</span> valueList;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>FineReport</category>
+      </categories>
+      <tags>
+        <tag>FineReport</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>帆软笔记</title>
+    <url>/2023/11/08/%E5%B8%86%E8%BD%AF%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="帆软JavaScript"><a href="#帆软JavaScript" class="headerlink" title="帆软JavaScript"></a>帆软JavaScript</h2><h3 id="FineReport查询按钮事件"><a href="#FineReport查询按钮事件" class="headerlink" title="FineReport查询按钮事件"></a>FineReport查询按钮事件</h3><p>在事件里添加JS代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">_g</span>().<span class="title function_">parameterCommit</span>();</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+
+<h3 id="FineReport弹窗"><a href="#FineReport弹窗" class="headerlink" title="FineReport弹窗"></a>FineReport弹窗</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable constant_">FR</span>.<span class="property">Msg</span>.<span class="title function_">toast</span>(<span class="string">&quot;短号或分部不能为空！&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="正则表达式去空格"><a href="#正则表达式去空格" class="headerlink" title="正则表达式去空格"></a>正则表达式去空格</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> mcu=<span class="string">&#x27; Hello    &#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> mcu = mcu.<span class="title function_">replace</span>(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="解决URL中文参数乱码问题"><a href="#解决URL中文参数乱码问题" class="headerlink" title="解决URL中文参数乱码问题"></a>解决URL中文参数乱码问题</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">url = <span class="built_in">encodeURI</span>(url)</span><br></pre></td></tr></table></figure>
+
+<h3 id="JS跳转其他界面"><a href="#JS跳转其他界面" class="headerlink" title="JS跳转其他界面"></a>JS跳转其他界面</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="variable constant_">FR</span>.<span class="title function_">cjkEncode</span>(<span class="string">&quot;$&#123;servletURL&#125;?reportlet=/demo/basic/DetailedDrillB.cpt&amp;订单号=&quot;</span> + id + <span class="string">&quot;&amp;format=excel&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span>=<span class="string">&quot;$&#123;servletURL&#125;?reportlet=WMS%2FWMS111.cpt&amp;itm=&quot;</span> + itm + <span class="string">&quot;&amp;lotn=&quot;</span>+lotn+<span class="string">&quot;&amp;doco=&quot;</span>+doco+<span class="string">&quot;&amp;rq=&quot;</span>+rq+<span class="string">&quot;&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取控件"><a href="#获取控件" class="headerlink" title="获取控件"></a>获取控件</h3><blockquote>
+<p>在参数界面、决策报表界面获取控件的方法是相同的，先获取决策报表，再通过控件名称来获取控件 </p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Widget</span> = <span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">form</span>.<span class="title function_">getWidgetByName</span>(<span class="string">&quot;WidgetName&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> branchid=<span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">form</span>.<span class="title function_">getWidgetByName</span>(<span class="string">&quot;branchid&quot;</span>).<span class="title function_">getValue</span>();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在 cpt 填报时获取控件，先获取报表对象 contentPane，再通过控件名称来获取控件</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Widget</span> = contentPane.<span class="title function_">getWidgetByName</span>(<span class="string">&quot;WidgetName&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="FineReport公式"><a href="#FineReport公式" class="headerlink" title="FineReport公式"></a>FineReport公式</h2><h3 id="获取上一单元格内容"><a href="#获取上一单元格内容" class="headerlink" title="获取上一单元格内容"></a>获取上一单元格内容</h3><p> 当前单元格B3取上一B3单元格的值<br><strong>B3[A3:-1]</strong></p>
+<h3 id="获取当月第一天"><a href="#获取当月第一天" class="headerlink" title="获取当月第一天"></a>获取当月第一天</h3><p><strong>DATEINMONTH(TODAY(),1)</strong></p>
+<h2 id="自定义下载"><a href="#自定义下载" class="headerlink" title="自定义下载"></a>自定义下载</h2><p>链接结尾加上</p>
+<p>&amp;format&#x3D;text    导出文本</p>
+<p>format&#x3D;excel     导出excel</p>
+<h2 id><a href="#" class="headerlink" title></a></h2>]]></content>
+      <categories>
+        <category>FineReport</category>
+      </categories>
+      <tags>
+        <tag>FineReport</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记录搭建hexo博客</title>
+    <url>/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>希望搭建此博客，记录每次所经之事</p>
+<h1 id="使用-Hexo"><a href="#使用-Hexo" class="headerlink" title="使用 Hexo"></a>使用 Hexo</h1><p>家里有一台矿渣我家云，我用docker部署了halo博客，无奈1G内存的机器，一会就跑满了，而且还要内网穿透，算了还是只把它当成下载机吧。<br>Hexo 虽然有点麻烦，但是可以放到Githu上。就选它了</p>
+<h1 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h1><h2 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h2><p>在Github 中新建仓库，仓库名称  <strong>xxx.github.io</strong>  xxx是自己的github账号</p>
+<span id="more"></span>
+<h2 id="创建新的分支"><a href="#创建新的分支" class="headerlink" title="创建新的分支"></a>创建新的分支</h2><p>由于上班回家两台终端，所以创建一个新的分支 hexo 存放博客源文件<br>master 分支 存放生成的网页文件</p>
+<img src="/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/newbranch.jpg" class title="This is an test image">
+
+<h1 id="安装-Node-js"><a href="#安装-Node-js" class="headerlink" title="安装 Node.js"></a>安装 Node.js</h1><p>下载地址：<a href="https://nodejs.org/en/download/">这里</a></p>
+<p>配置环境变量</p>
+<p>命令行 node -v  检查是否安装成功</p>
+<p>命令行 npm -v  检查是否安装成功</p>
+<h1 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h1><h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><h2 id="搭建hexo"><a href="#搭建hexo" class="headerlink" title="搭建hexo"></a>搭建hexo</h2><p>新建一个空的文件夹，进入文件夹，右键 Git Bash Here</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>初始化</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Hexo</span> init</span><br></pre></td></tr></table></figure>
+
+<p>新建一篇博客</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new &quot;First&quot;   # 新建一个名为First的博客</span><br></pre></td></tr></table></figure>
+
+<p>生成网页</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<p>浏览器打开 localhost:4000 就可以看到博客了</p>
+<h2 id="主题配置美化"><a href="#主题配置美化" class="headerlink" title="主题配置美化"></a>主题配置美化</h2><p><a href="https://blog.csdn.net/sywdebug/article/details/113942047?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169942639516800182710783%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=169942639516800182710783&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~sobaiduend~default-2-113942047-null-null.nonecase&utm_term=hexo%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E7%BE%8E%E5%8C%96&spm=1018.2226.3001.4450">参考链接</a></p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+</search>
