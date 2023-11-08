@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux系统下Mysql数据库备份</title>
+    <url>/2023/11/08/Linux%E7%B3%BB%E7%BB%9F%E4%B8%8BMysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD/</url>
+    <content><![CDATA[<p>– 备份Linux系统mysql数据库数据到Windows共享盘中</p>
+<h1 id="1、挂载Windows共享文件夹"><a href="#1、挂载Windows共享文件夹" class="headerlink" title="1、挂载Windows共享文件夹"></a>1、挂载Windows共享文件夹</h1><p>确保两台机器能够ping通</p>
+<h2 id="1-1-创建挂载目录"><a href="#1-1-创建挂载目录" class="headerlink" title="1.1 创建挂载目录"></a>1.1 创建挂载目录</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /data/winback/POS</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-2-挂载windows共享文件夹"><a href="#1-2-挂载windows共享文件夹" class="headerlink" title="1.2 挂载windows共享文件夹"></a>1.2 挂载windows共享文件夹</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo mount -t cifs -o username=username,password=password //192.168.3.12/bk/pos /data/winback/POS</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cifs是Common Internet File System，通用internet文件系统</span><br><span class="line">username是windows用户名</span><br><span class="line">password是windows密码</span><br><span class="line">//192.168.3.12/bk/pos</span><br><span class="line">/data/winback/POS/是linux上挂载的目录</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="2、修改mysql配置文件"><a href="#2、修改mysql配置文件" class="headerlink" title="2、修改mysql配置文件"></a>2、修改mysql配置文件</h1><p>注：小于5.6 版本请忽略</p>
+<p>​	mysql5.6 以后密码不能写在命令行里，要配置在mysql配置文件里</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">在my.ini 或my.cnf中添加</span><br><span class="line">[mysql]</span><br><span class="line">user=root</span><br><span class="line">password=&#x27;root&#x27;</span><br><span class="line"></span><br><span class="line">[mysqldump]</span><br><span class="line">user=root</span><br><span class="line">password=&#x27;root&#x27;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="3、创建备份脚本"><a href="#3、创建备份脚本" class="headerlink" title="3、创建备份脚本"></a>3、创建备份脚本</h1><p>这是网上找的，原链接找不到了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">一：导出备份文件</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">保存备份个数，备份7天数据</span></span><br><span class="line">number=7</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">挂载备份盘</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">备份保存路径</span></span><br><span class="line">backup_dir=/data/winback/POS</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">日期</span></span><br><span class="line">dd=`date +%Y-%m-%d-%H-%M-%S`</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">备份工具</span></span><br><span class="line">tool=mysqldump</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">用户名</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">username=root</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">密码</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">password=123456</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">mysql5.6以后不允许在命令行里使用明文密码</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将要备份的数据库</span></span><br><span class="line">database_name=dbname</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">如果文件夹不存在则创建</span></span><br><span class="line">if [ ! -d $backup_dir ];</span><br><span class="line">then     </span><br><span class="line">    mkdir -p $backup_dir;</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">导出备份文件</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">tool --defaults-extra-file=/etc/my.cnf <span class="variable">$database_name</span> -R -E &gt; <span class="variable">$backup_dir</span>/<span class="variable">$database_name</span>-<span class="variable">$dd</span>.sql</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">写创建备份日志</span></span><br><span class="line">echo &quot;create $backup_dir/$database_name-$dd.dupm&quot; &gt;&gt; $backup_dir/log.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">找出需要删除的备份</span></span><br><span class="line">delfile=`ls -l -crt $backup_dir/*.sql | awk &#x27;&#123;print $9 &#125;&#x27; | head -1`</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">判断现在的备份数量是否大于<span class="variable">$number</span></span></span><br><span class="line">count=`ls -l -crt $backup_dir/*.sql | awk &#x27;&#123;print $9 &#125;&#x27; | wc -l`</span><br><span class="line"></span><br><span class="line">if [ $count -gt $number ]</span><br><span class="line">then</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">删除最早生成的备份，只保留number数量的备份</span></span><br><span class="line">  rm $delfile</span><br><span class="line"><span class="meta prompt_">  #</span><span class="language-bash">写删除文件日志</span></span><br><span class="line">  echo &quot;delete $delfile&quot; &gt;&gt; $backup_dir/log.txt</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="4、开启计划任务自动执行"><a href="#4、开启计划任务自动执行" class="headerlink" title="4、开启计划任务自动执行"></a>4、开启计划任务自动执行</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">插入</span><br><span class="line">00 23 *** /bin /sh  /data/winback/POS/PosBackup.sh</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>crontab</title>
-    <url>/2023/08/01/crontab/</url>
+    <url>/2023/11/08/crontab/</url>
     <content><![CDATA[<p>linux crontab 计划任务</p>
 <p><strong>安装crontab</strong></p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install crontabs </span><br></pre></td></tr></table></figure>
@@ -43,7 +78,7 @@
   </entry>
   <entry>
     <title>帆软使用API接口数据</title>
-    <url>/2023/08/01/%E5%B8%86%E8%BD%AF%E4%BD%BF%E7%94%A8API%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE/</url>
+    <url>/2023/11/08/%E5%B8%86%E8%BD%AF%E4%BD%BF%E7%94%A8API%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<p>1、<a href="https://help.fanruan.com/finereport/doc-view-745.html">使用ecilpse 打开FineReport工程 </a></p>
 <p>2、<a href="https://help.fanruan.com/finereport/doc-view-650.html">程序数据集</a></p>
 <span id="more"></span>
