@@ -29,7 +29,7 @@
 
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>笔记</category>
       </categories>
       <tags>
         <tag>Linux</tag>
@@ -71,7 +71,7 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改/添加定时任务</span></span><br><span class="line">crontab -e</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每分钟把hello world字符串写入/home/string.txt文件中</span></span><br><span class="line">* * * * * echo &quot;hello world&quot; &gt;&gt; /home/string.txt</span><br><span class="line">更多案例</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改/添加定时任务</span></span><br><span class="line">crontab -e</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每天3点执行</span></span><br><span class="line">* 3 * * * 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每天18点30分执行</span></span><br><span class="line">30 18 * * * 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每个月的1号的12点15分执行</span></span><br><span class="line">15 12 1 * *  执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每年的3月1号的11点45分执行</span></span><br><span class="line">45 11 1 3 * 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">每周三的16点30分执行</span></span><br><span class="line">30 16 * * 3 执行的语句</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第1列表示分钟1～59 每分钟用或者 /1表示</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第2列表示小时1～23（0表示0点）</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第3列表示日期1～31</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第4列表示月份1～12</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第5列标识号星期0～6（0表示星期天）</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">第6列要运行的命令</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>笔记</category>
       </categories>
       <tags>
         <tag>crontab</tag>
@@ -84,10 +84,10 @@
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"># 调用查询按钮</span><br><span class="line"><span class="title function_">_g</span>().<span class="title function_">parameterCommit</span>();</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"># 调用填报页面提交按钮</span><br><span class="line"><span class="title function_">_g</span>().<span class="title function_">verifyAndWriteReport</span>(<span class="literal">true</span>);;</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
-
-<h3 id="FineReport弹窗"><a href="#FineReport弹窗" class="headerlink" title="FineReport弹窗"></a>FineReport弹窗</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable constant_">FR</span>.<span class="property">Msg</span>.<span class="title function_">toast</span>(<span class="string">&quot;短号或分部不能为空！&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="FineReport弹窗"><a href="#FineReport弹窗" class="headerlink" title="FineReport弹窗"></a>FineReport弹窗</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable constant_">FR</span>.<span class="property">Msg</span>.<span class="title function_">toast</span>(<span class="string">&quot;弹窗内容！&quot;</span>);</span><br></pre></td></tr></table></figure>
 
 <h3 id="正则表达式去空格"><a href="#正则表达式去空格" class="headerlink" title="正则表达式去空格"></a>正则表达式去空格</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> mcu=<span class="string">&#x27; Hello    &#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> mcu = mcu.<span class="title function_">replace</span>(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -98,7 +98,7 @@
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span>=<span class="string">&quot;$&#123;servletURL&#125;?reportlet=WMS%2FWMS111.cpt&amp;itm=&quot;</span> + itm + <span class="string">&quot;&amp;lotn=&quot;</span>+lotn+<span class="string">&quot;&amp;doco=&quot;</span>+doco+<span class="string">&quot;&amp;rq=&quot;</span>+rq+<span class="string">&quot;&quot;</span>;</span><br></pre></td></tr></table></figure>
 
 <h3 id="获取控件"><a href="#获取控件" class="headerlink" title="获取控件"></a>获取控件</h3><blockquote>
-<p>在参数界面、决策报表界面获取控件的方法是相同的，先获取决策报表，再通过控件名称来获取控件 </p>
+<p>在参数界面、决策报表界面获取控件的方法是相同的，先获取决策报表，再通过控件名称来获取控件</p>
 </blockquote>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Widget</span> = <span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">form</span>.<span class="title function_">getWidgetByName</span>(<span class="string">&quot;WidgetName&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> branchid=<span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">form</span>.<span class="title function_">getWidgetByName</span>(<span class="string">&quot;branchid&quot;</span>).<span class="title function_">getValue</span>();</span><br></pre></td></tr></table></figure>
 
@@ -112,9 +112,9 @@
 <h2 id="自定义下载"><a href="#自定义下载" class="headerlink" title="自定义下载"></a>自定义下载</h2><p>链接结尾加上</p>
 <p>&amp;format&#x3D;text    导出文本</p>
 <p>format&#x3D;excel     导出excel</p>
-<h2 id><a href="#" class="headerlink" title></a></h2>]]></content>
+]]></content>
       <categories>
-        <category>FineReport</category>
+        <category>笔记</category>
       </categories>
       <tags>
         <tag>FineReport</tag>
@@ -131,7 +131,7 @@
 
 ]]></content>
       <categories>
-        <category>FineReport</category>
+        <category>笔记</category>
       </categories>
       <tags>
         <tag>FineReport</tag>
@@ -167,10 +167,24 @@
 <h2 id="主题配置美化"><a href="#主题配置美化" class="headerlink" title="主题配置美化"></a>主题配置美化</h2><p><a href="https://blog.csdn.net/sywdebug/article/details/113942047?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169942639516800182710783%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=169942639516800182710783&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~sobaiduend~default-2-113942047-null-null.nonecase&utm_term=hexo%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E7%BE%8E%E5%8C%96&spm=1018.2226.3001.4450">参考链接</a></p>
 ]]></content>
       <categories>
-        <category>hexo</category>
+        <category>笔记</category>
       </categories>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>随笔</title>
+    <url>/2023/11/08/%E9%9A%8F%E7%AC%94/</url>
+    <content><![CDATA[<p>可能是抖音鸡汤看多了，说是生活在小城市月薪5000，工作双休，父母健康就已经超过了很多人。</p>
+<p>我以前也是这么认为的，但是真的从经营自己的生活起，我才发现我的薪水远远满足不了生活。</p>
+<p>想转变又不知道该从哪里转变</p>
+]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
 </search>
