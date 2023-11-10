@@ -78,6 +78,35 @@
       </tags>
   </entry>
   <entry>
+    <title>帆软使用API接口数据</title>
+    <url>/2023/11/08/%E5%B8%86%E8%BD%AF%E4%BD%BF%E7%94%A8API%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<p>1、<a href="https://help.fanruan.com/finereport/doc-view-745.html">使用ecilpse 打开FineReport工程 </a></p>
+<p>2、<a href="https://help.fanruan.com/finereport/doc-view-650.html">程序数据集</a></p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.fr.data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONObject;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONUtil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeatherInfo</span> <span class="keyword">extends</span> <span class="title class_">SimpleTableData</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 初始化列头</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String[] initColumnNames() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;wea&quot;</span>, <span class="string">&quot;win&quot;</span>, <span class="string">&quot;win_speed&quot;</span>, <span class="string">&quot;tem_day&quot;</span>, <span class="string">&quot;tem_night&quot;</span> &#125;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 加载行列数据</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> List&lt;Object[]&gt; loadData() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 访问免费天气API 接口 获取天气数据</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;https://v0.yiketianqi.com/free/day?appid=36978295&amp;appsecret=4tAvI4fv&amp;unescape=1&quot;</span>;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 获取返回值</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">Content</span> <span class="operator">=</span> HttpUtil.get(url);</span><br><span class="line">		<span class="type">JSONObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> JSONUtil.parseObj(Content);</span><br><span class="line"></span><br><span class="line">		<span class="type">String</span> <span class="variable">wea</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;wea&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">win</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win&quot;</span>).toString();</span><br><span class="line">		<span class="type">String</span> <span class="variable">win_speed</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win_speed&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_day</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_day&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_night</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_night&quot;</span>);</span><br><span class="line"></span><br><span class="line">		ArrayList&lt;Object[]&gt; valueList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">		valueList.add(<span class="keyword">new</span> <span class="title class_">Object</span>[] &#123; wea, win, win_speed, tem_day, tem_night &#125;);</span><br><span class="line">		<span class="keyword">return</span> valueList;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>FineReport</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>帆软大屏幕</title>
+    <url>/2023/11/10/%E5%B8%86%E8%BD%AF%E5%A4%A7%E5%B1%8F%E5%B9%95/</url>
+    <content><![CDATA[<img src="/2023/11/10/%E5%B8%86%E8%BD%AF%E5%A4%A7%E5%B1%8F%E5%B9%95/screen.jpg" class title="This is an test image">
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>FineReport</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>帆软笔记</title>
     <url>/2023/11/08/%E5%B8%86%E8%BD%AF%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h2 id="帆软JavaScript"><a href="#帆软JavaScript" class="headerlink" title="帆软JavaScript"></a>帆软JavaScript</h2><h3 id="FineReport查询按钮事件"><a href="#FineReport查询按钮事件" class="headerlink" title="FineReport查询按钮事件"></a>FineReport查询按钮事件</h3><p>在空间事件里添加JS代码</p>
@@ -121,23 +150,6 @@
       </tags>
   </entry>
   <entry>
-    <title>帆软使用API接口数据</title>
-    <url>/2023/11/08/%E5%B8%86%E8%BD%AF%E4%BD%BF%E7%94%A8API%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<p>1、<a href="https://help.fanruan.com/finereport/doc-view-745.html">使用ecilpse 打开FineReport工程 </a></p>
-<p>2、<a href="https://help.fanruan.com/finereport/doc-view-650.html">程序数据集</a></p>
-<span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.fr.data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONObject;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONUtil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeatherInfo</span> <span class="keyword">extends</span> <span class="title class_">SimpleTableData</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 初始化列头</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String[] initColumnNames() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;wea&quot;</span>, <span class="string">&quot;win&quot;</span>, <span class="string">&quot;win_speed&quot;</span>, <span class="string">&quot;tem_day&quot;</span>, <span class="string">&quot;tem_night&quot;</span> &#125;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 加载行列数据</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> List&lt;Object[]&gt; loadData() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 访问免费天气API 接口 获取天气数据</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;https://v0.yiketianqi.com/free/day?appid=36978295&amp;appsecret=4tAvI4fv&amp;unescape=1&quot;</span>;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 获取返回值</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">Content</span> <span class="operator">=</span> HttpUtil.get(url);</span><br><span class="line">		<span class="type">JSONObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> JSONUtil.parseObj(Content);</span><br><span class="line"></span><br><span class="line">		<span class="type">String</span> <span class="variable">wea</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;wea&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">win</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win&quot;</span>).toString();</span><br><span class="line">		<span class="type">String</span> <span class="variable">win_speed</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win_speed&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_day</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_day&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_night</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_night&quot;</span>);</span><br><span class="line"></span><br><span class="line">		ArrayList&lt;Object[]&gt; valueList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">		valueList.add(<span class="keyword">new</span> <span class="title class_">Object</span>[] &#123; wea, win, win_speed, tem_day, tem_night &#125;);</span><br><span class="line">		<span class="keyword">return</span> valueList;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>FineReport</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>记录搭建hexo博客</title>
     <url>/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>希望搭建此博客，记录每次所经之事</p>
@@ -171,20 +183,6 @@
       </categories>
       <tags>
         <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>随笔</title>
-    <url>/2023/11/08/%E9%9A%8F%E7%AC%94/</url>
-    <content><![CDATA[<p>可能是抖音鸡汤看多了，说是生活在小城市月薪5000，工作双休，父母健康就已经超过了很多人。</p>
-<p>我以前也是这么认为的，但是真的从经营自己的生活起，我才发现我的薪水远远满足不了生活。</p>
-<p>想转变又不知道该从哪里转变</p>
-]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
       </tags>
   </entry>
 </search>
