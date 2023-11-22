@@ -18,30 +18,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"stonesmover.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":50,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="前言希望搭建此博客，记录每次所经之事 使用 Hexo家里有一台矿渣我家云，我用docker部署了halo博客，无奈1G内存的机器，一会就跑满了，而且还要内网穿透，算了还是只把它当成下载机吧。Hexo 虽然有点麻烦，但是可以放到Githu上。就选它了 Github新建仓库在Github 中新建仓库，仓库名称  xxx.github.io  xxx是自己的github账号">
+    <meta name="description" content="1、创建备份目标文件夹1mkdir &#x2F;mnt&#x2F;CRM  2、创建备份脚本1vim backup.sh  12345678910111213141516#!&#x2F;bin&#x2F;bash#创建&#x2F;root&#x2F;bbb目录 用户存放备份文件SOURCE_DIR&#x3D;&#x2F;home&#x2F;pv&#x2F;crmDEST_DIR&#x3D;&#x2F;mnt&#x2F;CRM&#x2F;Files#mkdir $&amp;#123;DEST_DIR&amp;#125;#当前时间作为文件名DATETIM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记录搭建hexo博客">
-<meta property="og:url" content="https://stonesmover.github.io/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:title" content="Linux备份文件夹">
+<meta property="og:url" content="https://stonesmover.github.io/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/index.html">
 <meta property="og:site_name" content="你像一束风">
-<meta property="og:description" content="前言希望搭建此博客，记录每次所经之事 使用 Hexo家里有一台矿渣我家云，我用docker部署了halo博客，无奈1G内存的机器，一会就跑满了，而且还要内网穿透，算了还是只把它当成下载机吧。Hexo 虽然有点麻烦，但是可以放到Githu上。就选它了 Github新建仓库在Github 中新建仓库，仓库名称  xxx.github.io  xxx是自己的github账号">
+<meta property="og:description" content="1、创建备份目标文件夹1mkdir &#x2F;mnt&#x2F;CRM  2、创建备份脚本1vim backup.sh  12345678910111213141516#!&#x2F;bin&#x2F;bash#创建&#x2F;root&#x2F;bbb目录 用户存放备份文件SOURCE_DIR&#x3D;&#x2F;home&#x2F;pv&#x2F;crmDEST_DIR&#x3D;&#x2F;mnt&#x2F;CRM&#x2F;Files#mkdir $&amp;#123;DEST_DIR&amp;#125;#当前时间作为文件名DATETIM">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://stonesmover.github.io/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/newbranch.jpg">
-<meta property="article:published_time" content="2023-11-08T01:03:56.000Z">
-<meta property="article:modified_time" content="2023-11-09T00:28:40.068Z">
+<meta property="article:published_time" content="2023-11-22T08:16:32.000Z">
+<meta property="article:modified_time" content="2023-11-22T08:30:10.774Z">
 <meta property="article:author" content="Stonesmover">
-<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://stonesmover.github.io/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/newbranch.jpg">
 
 
-<link rel="canonical" href="https://stonesmover.github.io/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/">
+<link rel="canonical" href="https://stonesmover.github.io/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://stonesmover.github.io/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/","path":"2023/11/08/记录搭建hexo博客/","title":"记录搭建hexo博客"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://stonesmover.github.io/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/","path":"2023/11/22/Linux备份文件夹/","title":"Linux备份文件夹"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>记录搭建hexo博客 | 你像一束风</title>
+<title>Linux备份文件夹 | 你像一束风</title>
   
 
 
@@ -113,7 +111,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Hexo"><span class="nav-number">2.</span> <span class="nav-text">使用 Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Github"><span class="nav-number">3.</span> <span class="nav-text">Github</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-number">3.1.</span> <span class="nav-text">新建仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">3.2.</span> <span class="nav-text">创建新的分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Node-js"><span class="nav-number">4.</span> <span class="nav-text">安装 Node.js</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Git"><span class="nav-number">5.</span> <span class="nav-text">安装 Git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Hexo"><span class="nav-number">6.</span> <span class="nav-text">安装Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BAhexo"><span class="nav-number">6.1.</span> <span class="nav-text">搭建hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E7%BE%8E%E5%8C%96"><span class="nav-number">6.2.</span> <span class="nav-text">主题配置美化</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E5%A4%87%E4%BB%BD%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.</span> <span class="nav-text">1、创建备份目标文件夹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BA%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text">2、创建备份脚本</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -171,7 +169,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://stonesmover.github.io/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/">
+    <link itemprop="mainEntityOfPage" href="https://stonesmover.github.io/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -184,12 +182,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="记录搭建hexo博客 | 你像一束风">
+      <meta itemprop="name" content="Linux备份文件夹 | 你像一束风">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          记录搭建hexo博客
+          Linux备份文件夹
         </h1>
 
         <div class="post-meta-container">
@@ -199,15 +197,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2023-11-08 09:03:56" itemprop="dateCreated datePublished" datetime="2023-11-08T09:03:56+08:00">2023-11-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-09 08:28:40" itemprop="dateModified" datetime="2023-11-09T08:28:40+08:00">2023-11-09</time>
+      <time title="创建时间：2023-11-22 16:16:32 / 修改时间：16:30:10" itemprop="dateCreated datePublished" datetime="2023-11-22T16:16:32+08:00">2023-11-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -215,7 +207,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
         </span>
     </span>
 
@@ -226,7 +218,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>474</span>
+      <span>601</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -243,31 +235,18 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>希望搭建此博客，记录每次所经之事</p>
-<h1 id="使用-Hexo"><a href="#使用-Hexo" class="headerlink" title="使用 Hexo"></a>使用 Hexo</h1><p>家里有一台矿渣我家云，我用docker部署了halo博客，无奈1G内存的机器，一会就跑满了，而且还要内网穿透，算了还是只把它当成下载机吧。<br>Hexo 虽然有点麻烦，但是可以放到Githu上。就选它了</p>
-<h1 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h1><h2 id="新建仓库"><a href="#新建仓库" class="headerlink" title="新建仓库"></a>新建仓库</h2><p>在Github 中新建仓库，仓库名称  <strong>xxx.github.io</strong>  xxx是自己的github账号</p>
-<span id="more"></span>
-<h2 id="创建新的分支"><a href="#创建新的分支" class="headerlink" title="创建新的分支"></a>创建新的分支</h2><p>由于上班回家两台终端，所以创建一个新的分支 hexo 存放博客源文件<br>master 分支 存放生成的网页文件</p>
-<img src="/2023/11/08/%E8%AE%B0%E5%BD%95%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/newbranch.jpg" class title="This is an test image">
+    <div class="post-body" itemprop="articleBody"><h4 id="1、创建备份目标文件夹"><a href="#1、创建备份目标文件夹" class="headerlink" title="1、创建备份目标文件夹"></a>1、创建备份目标文件夹</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/CRM</span><br></pre></td></tr></table></figure>
 
-<h1 id="安装-Node-js"><a href="#安装-Node-js" class="headerlink" title="安装 Node.js"></a>安装 Node.js</h1><p>下载地址：<a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">这里</a></p>
-<p>配置环境变量</p>
-<p>命令行 node -v  检查是否安装成功</p>
-<p>命令行 npm -v  检查是否安装成功</p>
-<h1 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h1><h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><h2 id="搭建hexo"><a href="#搭建hexo" class="headerlink" title="搭建hexo"></a>搭建hexo</h2><p>新建一个空的文件夹，进入文件夹，右键 Git Bash Here</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<h4 id="2、创建备份脚本"><a href="#2、创建备份脚本" class="headerlink" title="2、创建备份脚本"></a>2、创建备份脚本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim backup.sh</span><br></pre></td></tr></table></figure>
 
-<p>初始化</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Hexo</span> init</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建/root/bbb目录 用户存放备份文件</span></span><br><span class="line">SOURCE_DIR=/home/pv/crm</span><br><span class="line">DEST_DIR=/mnt/CRM/Files</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">mkdir</span> <span class="variable">$&#123;DEST_DIR&#125;</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">当前时间作为文件名</span></span><br><span class="line">DATETIME=$(date +%Y-%m-%d_%H-%M-%S)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将要备份的文件夹中内容复制到目标目录/home/bbb目录下</span></span><br><span class="line">cp -r $&#123;SOURCE_DIR&#125; $&#123;DEST_DIR&#125;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将复制过来的文件打包 并删除文件</span></span><br><span class="line">cd $&#123;DEST_DIR&#125;</span><br><span class="line">tar -zcvf $&#123;DATETIME&#125;.tar.gz ./</span><br><span class="line">rm -rf $&#123;DEST_DIR&#125;/examxx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除该文件夹下超过2天的文件</span></span><br><span class="line">find $&#123;DEST_DIR&#125; -mtime +2 -name &quot;*.tar.gz&quot; -exec rm -rf &#123;&#125; \;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>新建一篇博客</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;First&quot;   # 新建一个名为First的博客</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wangqing84411433/article/details/129632447?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170062530416800186563739%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=170062530416800186563739&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-4-129632447-null-null.nonecase&utm_term=linux%E6%89%93%E5%8C%85%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9&spm=1018.2226.3001.4450">参考文章</a></p>
+<p>3、赋予执行权限</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 backup.sh</span><br></pre></td></tr></table></figure>
 
-<p>生成网页</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-
-<p>浏览器打开 localhost:4000 就可以看到博客了</p>
-<h2 id="主题配置美化"><a href="#主题配置美化" class="headerlink" title="主题配置美化"></a>主题配置美化</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sywdebug/article/details/113942047?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169942639516800182710783%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=169942639516800182710783&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~sobaiduend~default-2-113942047-null-null.nonecase&utm_term=hexo%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE%E7%BE%8E%E5%8C%96&spm=1018.2226.3001.4450">参考链接</a></p>
+<p>4、设置计划任务每天自动备份</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">插入</span><br><span class="line">00 23 *** /bin /sh  /mnt/CRM/Files/backup.sh</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -277,18 +256,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/hexo/" rel="tag"># hexo</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2023/11/10/%E5%B8%86%E8%BD%AF%E5%A4%A7%E5%B1%8F%E5%B9%95/" rel="prev" title="帆软大屏幕">
+                  <i class="fa fa-angle-left"></i> 帆软大屏幕
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/11/08/%E5%B8%86%E8%BD%AF%E7%AC%94%E8%AE%B0/" rel="next" title="帆软笔记">
-                  帆软笔记 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

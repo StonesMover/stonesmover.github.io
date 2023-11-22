@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux备份文件夹</title>
+    <url>/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
+    <content><![CDATA[<h4 id="1、创建备份目标文件夹"><a href="#1、创建备份目标文件夹" class="headerlink" title="1、创建备份目标文件夹"></a>1、创建备份目标文件夹</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/CRM</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、创建备份脚本"><a href="#2、创建备份脚本" class="headerlink" title="2、创建备份脚本"></a>2、创建备份脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim backup.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建/root/bbb目录 用户存放备份文件</span></span><br><span class="line">SOURCE_DIR=/home/pv/crm</span><br><span class="line">DEST_DIR=/mnt/CRM/Files</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">mkdir</span> <span class="variable">$&#123;DEST_DIR&#125;</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">当前时间作为文件名</span></span><br><span class="line">DATETIME=$(date +%Y-%m-%d_%H-%M-%S)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将要备份的文件夹中内容复制到目标目录/home/bbb目录下</span></span><br><span class="line">cp -r $&#123;SOURCE_DIR&#125; $&#123;DEST_DIR&#125;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将复制过来的文件打包 并删除文件</span></span><br><span class="line">cd $&#123;DEST_DIR&#125;</span><br><span class="line">tar -zcvf $&#123;DATETIME&#125;.tar.gz ./</span><br><span class="line">rm -rf $&#123;DEST_DIR&#125;/examxx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除该文件夹下超过2天的文件</span></span><br><span class="line">find $&#123;DEST_DIR&#125; -mtime +2 -name &quot;*.tar.gz&quot; -exec rm -rf &#123;&#125; \;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://blog.csdn.net/wangqing84411433/article/details/129632447?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170062530416800186563739%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=170062530416800186563739&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-4-129632447-null-null.nonecase&utm_term=linux%E6%89%93%E5%8C%85%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9&spm=1018.2226.3001.4450">参考文章</a></p>
+<p>3、赋予执行权限</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 700 backup.sh</span><br></pre></td></tr></table></figure>
+
+<p>4、设置计划任务每天自动备份</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">插入</span><br><span class="line">00 23 *** /bin /sh  /mnt/CRM/Files/backup.sh</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux系统下Mysql数据库备份</title>
     <url>/2023/11/08/Linux%E7%B3%BB%E7%BB%9F%E4%B8%8BMysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD/</url>
     <content><![CDATA[<p>– 备份Linux系统mysql数据库数据到Windows共享盘中</p>
