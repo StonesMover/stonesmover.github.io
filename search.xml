@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux备份文件夹</title>
-    <url>/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
-    <content><![CDATA[<h4 id="1、创建备份目标文件夹"><a href="#1、创建备份目标文件夹" class="headerlink" title="1、创建备份目标文件夹"></a>1、创建备份目标文件夹</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/CRM</span><br></pre></td></tr></table></figure>
+    <title>Docker容器mysql数据库数据导出备份</title>
+    <url>/2023/11/23/Docker%E5%AE%B9%E5%99%A8mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA%E5%A4%87%E4%BB%BD/</url>
+    <content><![CDATA[<h4 id="查找mysql容器id"><a href="#查找mysql容器id" class="headerlink" title="查找mysql容器id"></a>查找mysql容器id</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker ps -aqf &quot;name=mysql&quot;</span><br></pre></td></tr></table></figure>
 
 <span id="more"></span>
 
+<h4 id="自动备份脚本"><a href="#自动备份脚本" class="headerlink" title="自动备份脚本"></a>自动备份脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">获取容器<span class="built_in">id</span></span></span><br><span class="line">container_id=`/usr/bin/docker ps -aqf &quot;name=mysql&quot;`</span><br><span class="line"> </span><br><span class="line">echo &quot;mysql的镜像ID is $container_id&quot;</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">登录用户名</span></span><br><span class="line">mysql_user=&quot;xxx&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">登录密码(注意 如果密码包含特殊符号 前面要用<span class="string">&#x27;\&#x27;</span>)</span></span><br><span class="line">mysql_password=&quot;xxx&quot;</span><br><span class="line">mysql_port=&quot;xxx&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">备份的数据库名</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">mysql_database=<span class="string">&quot;db1&quot;</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">要备份的数据库名称，多个用空格分开隔开 如(<span class="string">&quot;db1&quot;</span> <span class="string">&quot;db2&quot;</span> <span class="string">&quot;db3&quot;</span>)</span></span><br><span class="line">backup_db_arr=(&quot;nacos_devtest&quot; &quot;tw_tm_dev_cloudt_auth&quot; &quot;tw_tm_dev_system&quot; &quot;tw_tm_dev_tw5&quot; &quot;tw_tm_dev_workflow&quot;) </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">backup_db_arr=(<span class="string">&quot;nacos_devtest&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">是否删除过期数据</span></span><br><span class="line">expire_backup_delete=&quot;true&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">过期天数</span></span><br><span class="line">expire_days=7</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">备份文件存放地址(根据实际情况填写)</span></span><br><span class="line">backup_location=&quot;/mnt/CRM/DB&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">定义备份详细时间</span></span><br><span class="line">backup_time=`date +%Y%m%d%H%M`</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">定义备份目录中的年月日时间</span></span><br><span class="line">backup_Ymd=`date +%Y-%m-%d` </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">3天之前的日期</span></span><br><span class="line">backup_3ago=`date -d &#x27;4 days ago&#x27; +%Y-%m-%d` </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">备份文件夹全路径</span></span><br><span class="line">backup_dir=$backup_location/$backup_Ymd  </span><br><span class="line"> </span><br><span class="line">flag=`echo $?`</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">判断有没有定义备份的数据库，如果定义则开始备份，否则退出备份</span></span><br><span class="line">if [ &quot;$backup_db_arr&quot; != &quot;&quot; ];then</span><br><span class="line"> </span><br><span class="line">		for dbname in $&#123;backup_db_arr[@]&#125;</span><br><span class="line">		do</span><br><span class="line">				echo &quot;开始执行数据库 $dbname 备份...&quot;</span><br><span class="line">				`mkdir -p $backup_dir`</span><br><span class="line">				# 备份指定数据库中数据</span><br><span class="line"></span><br><span class="line">				`docker exec  $container_id mysqldump -uroot -pXXXXX -F -B  --default-character-set=utf8 $dbname &gt; $backup_dir/bak-$dbname-$backup_time.sql`</span><br><span class="line"></span><br><span class="line">				flag=`echo $?`</span><br><span class="line">				if [ $flag == &quot;0&quot; ];then</span><br><span class="line">						echo &quot;数据库 $dbname 成功备份到 $backup_dir/bak-$dbname-$backup_time.sql&quot;</span><br><span class="line"></span><br><span class="line">				else</span><br><span class="line">						echo &quot;数据库 $dbname 备份失败!&quot;</span><br><span class="line">				fi</span><br><span class="line"></span><br><span class="line">		done</span><br><span class="line">else</span><br><span class="line">		echo &quot;没有待备份的数据库，停止数据库备份&quot;</span><br><span class="line">		exit</span><br><span class="line">fi</span><br><span class="line"> </span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除过期数据</span></span><br><span class="line">if [ &quot;$expire_backup_delete&quot; == &quot;true&quot; -a &quot;$backup_dir&quot;!=&quot;&quot; ];then</span><br><span class="line">        `find $backup_dir/ -type f -mtime +$expire_days | xargs rm -rf`</span><br><span class="line">        echo &quot;删除失效的数据库备份信息!&quot;</span><br><span class="line">fi</span><br><span class="line"> </span><br><span class="line">echo &quot;所有的数据库已完成备份&quot;</span><br><span class="line">exit</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 
-<h4 id="2、创建备份脚本"><a href="#2、创建备份脚本" class="headerlink" title="2、创建备份脚本"></a>2、创建备份脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim backup.sh</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建/root/bbb目录 用户存放备份文件</span></span><br><span class="line">SOURCE_DIR=/home/pv/crm</span><br><span class="line">DEST_DIR=/mnt/CRM/Files</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">mkdir</span> <span class="variable">$&#123;DEST_DIR&#125;</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">当前时间作为文件名</span></span><br><span class="line">DATETIME=$(date +%Y-%m-%d_%H-%M-%S)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将要备份的文件夹中内容复制到目标目录/home/bbb目录下</span></span><br><span class="line">cp -r $&#123;SOURCE_DIR&#125; $&#123;DEST_DIR&#125;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将复制过来的文件打包 并删除文件</span></span><br><span class="line">cd $&#123;DEST_DIR&#125;</span><br><span class="line">tar -zcvf $&#123;DATETIME&#125;.tar.gz ./</span><br><span class="line">rm -rf $&#123;DEST_DIR&#125;/examxx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除该文件夹下超过2天的文件</span></span><br><span class="line">find $&#123;DEST_DIR&#125; -mtime +2 -name &quot;*.tar.gz&quot; -exec rm -rf &#123;&#125; \;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><a href="https://blog.csdn.net/wangqing84411433/article/details/129632447?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170062530416800186563739%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=170062530416800186563739&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-4-129632447-null-null.nonecase&utm_term=linux%E6%89%93%E5%8C%85%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9&spm=1018.2226.3001.4450">参考文章</a></p>
-<p>3、赋予执行权限</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 700 backup.sh</span><br></pre></td></tr></table></figure>
-
-<p>4、设置计划任务每天自动备份</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">插入</span><br><span class="line">00 23 *** /bin /sh  /mnt/CRM/Files/backup.sh</span><br></pre></td></tr></table></figure>
+<p>设置计划任务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">30 23 * * * /mnt/CRM/DB/mysqlbackup.sh</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>笔记</category>
       </categories>
       <tags>
         <tag>Linux</tag>
@@ -60,6 +53,32 @@
       <tags>
         <tag>Linux</tag>
         <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux备份文件夹</title>
+    <url>/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
+    <content><![CDATA[<h4 id="1、创建备份目标文件夹"><a href="#1、创建备份目标文件夹" class="headerlink" title="1、创建备份目标文件夹"></a>1、创建备份目标文件夹</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/CRM</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h4 id="2、创建备份脚本"><a href="#2、创建备份脚本" class="headerlink" title="2、创建备份脚本"></a>2、创建备份脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim backup.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建/root/bbb目录 用户存放备份文件</span></span><br><span class="line">SOURCE_DIR=/home/pv/crm</span><br><span class="line">DEST_DIR=/mnt/CRM/Files</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">mkdir</span> <span class="variable">$&#123;DEST_DIR&#125;</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">当前时间作为文件名</span></span><br><span class="line">DATETIME=$(date +%Y-%m-%d_%H-%M-%S)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将要备份的文件夹中内容复制到目标目录/home/bbb目录下</span></span><br><span class="line">cp -r $&#123;SOURCE_DIR&#125; $&#123;DEST_DIR&#125;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将复制过来的文件打包 并删除文件</span></span><br><span class="line">cd $&#123;DEST_DIR&#125;</span><br><span class="line">tar -zcvf $&#123;DATETIME&#125;.tar.gz ./</span><br><span class="line">rm -rf $&#123;DEST_DIR&#125;/examxx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除该文件夹下超过2天的文件</span></span><br><span class="line">find $&#123;DEST_DIR&#125; -mtime +2 -name &quot;*.tar.gz&quot; -exec rm -rf &#123;&#125; \;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://blog.csdn.net/wangqing84411433/article/details/129632447?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170062530416800186563739%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=170062530416800186563739&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-4-129632447-null-null.nonecase&utm_term=linux%E6%89%93%E5%8C%85%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9&spm=1018.2226.3001.4450">参考文章</a></p>
+<p>3、赋予执行权限</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 700 backup.sh</span><br></pre></td></tr></table></figure>
+
+<p>4、设置计划任务每天自动备份</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">插入</span><br><span class="line">00 23 *** /bin /sh  /mnt/CRM/Files/backup.sh</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
