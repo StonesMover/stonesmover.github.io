@@ -20,6 +20,32 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux备份文件夹</title>
+    <url>/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
+    <content><![CDATA[<h4 id="1、创建备份目标文件夹"><a href="#1、创建备份目标文件夹" class="headerlink" title="1、创建备份目标文件夹"></a>1、创建备份目标文件夹</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/CRM</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h4 id="2、创建备份脚本"><a href="#2、创建备份脚本" class="headerlink" title="2、创建备份脚本"></a>2、创建备份脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim backup.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建/root/bbb目录 用户存放备份文件</span></span><br><span class="line">SOURCE_DIR=/home/pv/crm</span><br><span class="line">DEST_DIR=/mnt/CRM/Files</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">mkdir</span> <span class="variable">$&#123;DEST_DIR&#125;</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">当前时间作为文件名</span></span><br><span class="line">DATETIME=$(date +%Y-%m-%d_%H-%M-%S)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将要备份的文件夹中内容复制到目标目录/home/bbb目录下</span></span><br><span class="line">cp -r $&#123;SOURCE_DIR&#125; $&#123;DEST_DIR&#125;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将复制过来的文件打包 并删除文件</span></span><br><span class="line">cd $&#123;DEST_DIR&#125;</span><br><span class="line">tar -zcvf $&#123;DATETIME&#125;.tar.gz ./</span><br><span class="line">rm -rf $&#123;DEST_DIR&#125;/examxx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除该文件夹下超过2天的文件</span></span><br><span class="line">find $&#123;DEST_DIR&#125; -mtime +2 -name &quot;*.tar.gz&quot; -exec rm -rf &#123;&#125; \;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://blog.csdn.net/wangqing84411433/article/details/129632447?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170062530416800186563739%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=170062530416800186563739&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-4-129632447-null-null.nonecase&utm_term=linux%E6%89%93%E5%8C%85%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9&spm=1018.2226.3001.4450">参考文章</a></p>
+<p>3、赋予执行权限</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 700 backup.sh</span><br></pre></td></tr></table></figure>
+
+<p>4、设置计划任务每天自动备份</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">插入</span><br><span class="line">00 23 *** /bin /sh  /mnt/CRM/Files/backup.sh</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux系统下Mysql数据库备份</title>
     <url>/2023/11/08/Linux%E7%B3%BB%E7%BB%9F%E4%B8%8BMysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD/</url>
     <content><![CDATA[<p>– 备份Linux系统mysql数据库数据到Windows共享盘中</p>
@@ -56,29 +82,20 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux备份文件夹</title>
-    <url>/2023/11/22/Linux%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
-    <content><![CDATA[<h4 id="1、创建备份目标文件夹"><a href="#1、创建备份目标文件夹" class="headerlink" title="1、创建备份目标文件夹"></a>1、创建备份目标文件夹</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/CRM</span><br></pre></td></tr></table></figure>
-
+    <title>帆软使用API接口数据</title>
+    <url>/2023/11/08/%E5%B8%86%E8%BD%AF%E4%BD%BF%E7%94%A8API%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<p>1、<a href="https://help.fanruan.com/finereport/doc-view-745.html">使用ecilpse 打开FineReport工程 </a></p>
+<p>2、<a href="https://help.fanruan.com/finereport/doc-view-650.html">程序数据集</a></p>
 <span id="more"></span>
 
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.fr.data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONObject;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONUtil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeatherInfo</span> <span class="keyword">extends</span> <span class="title class_">SimpleTableData</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 初始化列头</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String[] initColumnNames() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;wea&quot;</span>, <span class="string">&quot;win&quot;</span>, <span class="string">&quot;win_speed&quot;</span>, <span class="string">&quot;tem_day&quot;</span>, <span class="string">&quot;tem_night&quot;</span> &#125;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 加载行列数据</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> List&lt;Object[]&gt; loadData() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 访问免费天气API 接口 获取天气数据</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;https://v0.yiketianqi.com/free/day?appid=36978295&amp;appsecret=4tAvI4fv&amp;unescape=1&quot;</span>;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 获取返回值</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">Content</span> <span class="operator">=</span> HttpUtil.get(url);</span><br><span class="line">		<span class="type">JSONObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> JSONUtil.parseObj(Content);</span><br><span class="line"></span><br><span class="line">		<span class="type">String</span> <span class="variable">wea</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;wea&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">win</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win&quot;</span>).toString();</span><br><span class="line">		<span class="type">String</span> <span class="variable">win_speed</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win_speed&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_day</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_day&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_night</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_night&quot;</span>);</span><br><span class="line"></span><br><span class="line">		ArrayList&lt;Object[]&gt; valueList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">		valueList.add(<span class="keyword">new</span> <span class="title class_">Object</span>[] &#123; wea, win, win_speed, tem_day, tem_night &#125;);</span><br><span class="line">		<span class="keyword">return</span> valueList;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="2、创建备份脚本"><a href="#2、创建备份脚本" class="headerlink" title="2、创建备份脚本"></a>2、创建备份脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim backup.sh</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建/root/bbb目录 用户存放备份文件</span></span><br><span class="line">SOURCE_DIR=/home/pv/crm</span><br><span class="line">DEST_DIR=/mnt/CRM/Files</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">mkdir</span> <span class="variable">$&#123;DEST_DIR&#125;</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">当前时间作为文件名</span></span><br><span class="line">DATETIME=$(date +%Y-%m-%d_%H-%M-%S)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将要备份的文件夹中内容复制到目标目录/home/bbb目录下</span></span><br><span class="line">cp -r $&#123;SOURCE_DIR&#125; $&#123;DEST_DIR&#125;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将复制过来的文件打包 并删除文件</span></span><br><span class="line">cd $&#123;DEST_DIR&#125;</span><br><span class="line">tar -zcvf $&#123;DATETIME&#125;.tar.gz ./</span><br><span class="line">rm -rf $&#123;DEST_DIR&#125;/examxx</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除该文件夹下超过2天的文件</span></span><br><span class="line">find $&#123;DEST_DIR&#125; -mtime +2 -name &quot;*.tar.gz&quot; -exec rm -rf &#123;&#125; \;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><a href="https://blog.csdn.net/wangqing84411433/article/details/129632447?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170062530416800186563739%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&request_id=170062530416800186563739&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-4-129632447-null-null.nonecase&utm_term=linux%E6%89%93%E5%8C%85%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%A4%B9&spm=1018.2226.3001.4450">参考文章</a></p>
-<p>3、赋予执行权限</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 700 backup.sh</span><br></pre></td></tr></table></figure>
-
-<p>4、设置计划任务每天自动备份</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br><span class="line">插入</span><br><span class="line">00 23 *** /bin /sh  /mnt/CRM/Files/backup.sh</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>笔记</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
+        <tag>FineReport</tag>
       </tags>
   </entry>
   <entry>
@@ -120,23 +137,6 @@
       </categories>
       <tags>
         <tag>crontab</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>帆软使用API接口数据</title>
-    <url>/2023/11/08/%E5%B8%86%E8%BD%AF%E4%BD%BF%E7%94%A8API%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<p>1、<a href="https://help.fanruan.com/finereport/doc-view-745.html">使用ecilpse 打开FineReport工程 </a></p>
-<p>2、<a href="https://help.fanruan.com/finereport/doc-view-650.html">程序数据集</a></p>
-<span id="more"></span>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.fr.data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.hutool.http.HttpUtil;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONObject;</span><br><span class="line"><span class="keyword">import</span> cn.hutool.json.JSONUtil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeatherInfo</span> <span class="keyword">extends</span> <span class="title class_">SimpleTableData</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 初始化列头</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> String[] initColumnNames() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; <span class="string">&quot;wea&quot;</span>, <span class="string">&quot;win&quot;</span>, <span class="string">&quot;win_speed&quot;</span>, <span class="string">&quot;tem_day&quot;</span>, <span class="string">&quot;tem_night&quot;</span> &#125;;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 加载行列数据</span></span><br><span class="line"><span class="comment">	 * </span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">public</span> List&lt;Object[]&gt; loadData() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 访问免费天气API 接口 获取天气数据</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;https://v0.yiketianqi.com/free/day?appid=36978295&amp;appsecret=4tAvI4fv&amp;unescape=1&quot;</span>;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * 获取返回值</span></span><br><span class="line"><span class="comment">		 * </span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="type">String</span> <span class="variable">Content</span> <span class="operator">=</span> HttpUtil.get(url);</span><br><span class="line">		<span class="type">JSONObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> JSONUtil.parseObj(Content);</span><br><span class="line"></span><br><span class="line">		<span class="type">String</span> <span class="variable">wea</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;wea&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">win</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win&quot;</span>).toString();</span><br><span class="line">		<span class="type">String</span> <span class="variable">win_speed</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;win_speed&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_day</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_day&quot;</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">tem_night</span> <span class="operator">=</span> jsonObject.getStr(<span class="string">&quot;tem_night&quot;</span>);</span><br><span class="line"></span><br><span class="line">		ArrayList&lt;Object[]&gt; valueList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">		valueList.add(<span class="keyword">new</span> <span class="title class_">Object</span>[] &#123; wea, win, win_speed, tem_day, tem_night &#125;);</span><br><span class="line">		<span class="keyword">return</span> valueList;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>FineReport</tag>
       </tags>
   </entry>
   <entry>
