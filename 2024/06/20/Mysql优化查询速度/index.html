@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"stonesmover.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":50,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="由于业务逻辑有点复杂，sql语句中关联了很多表和子查询，4W条数据查询时间要800多秒，经过大师指导成功缩减到秒级 先看原来的sql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql优化查询速度">
+<meta property="og:url" content="https://stonesmover.github.io/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/index.html">
+<meta property="og:site_name" content="你像一束风">
+<meta property="og:description" content="由于业务逻辑有点复杂，sql语句中关联了很多表和子查询，4W条数据查询时间要800多秒，经过大师指导成功缩减到秒级 先看原来的sql">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://stonesmover.github.io/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/picture1.jpg">
+<meta property="og:image" content="https://stonesmover.github.io/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/picture2.png">
+<meta property="article:published_time" content="2024-06-20T00:34:06.000Z">
+<meta property="article:modified_time" content="2024-06-20T00:49:13.875Z">
+<meta property="article:author" content="Stonesmover">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://stonesmover.github.io/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/picture1.jpg">
+
+
+<link rel="canonical" href="https://stonesmover.github.io/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://stonesmover.github.io/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/","path":"2024/06/20/Mysql优化查询速度/","title":"Mysql优化查询速度"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Mysql优化查询速度 | 你像一束风</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">你像一束风</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">5</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">10</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Stonesmover"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Stonesmover</p>
+  <div class="site-description" itemprop="description">吾不识青天高, 黄地厚, 唯见月寒日暖, 来煎人寿。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/StonesMover" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;StonesMover" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://stonesmover.github.io/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Stonesmover">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你像一束风">
+      <meta itemprop="description" content="吾不识青天高, 黄地厚, 唯见月寒日暖, 来煎人寿。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Mysql优化查询速度 | 你像一束风">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mysql优化查询速度
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-06-20 08:34:06 / 修改时间：08:49:13" itemprop="dateCreated datePublished" datetime="2024-06-20T08:34:06+08:00">2024-06-20</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>由于业务逻辑有点复杂，sql语句中关联了很多表和子查询，4W条数据查询时间要800多秒，经过大师指导成功缩减到秒级</p>
+<p>先看原来的sql</p>
+<span id="more"></span>
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">	a.id,</span><br><span class="line">	F.fidl01 <span class="keyword">AS</span> 区域,</span><br><span class="line">	v.org_name <span class="keyword">AS</span> 组织,</span><br><span class="line">	E.FIDL02,</span><br><span class="line">	b.fian86 <span class="keyword">AS</span> 售至地址号,</span><br><span class="line">	a.business_partner_no <span class="keyword">AS</span> 运至地址号,</span><br><span class="line">	a.partner_name <span class="keyword">AS</span> 客户名称,</span><br><span class="line">	(<span class="keyword">select</span> fidl01  <span class="keyword">from</span> jde_vi0005 <span class="keyword">where</span> fisy<span class="operator">=</span><span class="string">&#x27;01&#x27;</span> <span class="keyword">and</span> firt <span class="operator">=</span> <span class="string">&#x27;09&#x27;</span> <span class="keyword">and</span> fiky <span class="operator">=</span>(<span class="keyword">SELECT</span> fiac09 <span class="keyword">FROM</span> jde_vi0101  <span class="keyword">WHERE</span> fIAN8 <span class="operator">=</span> a.business_partner_no limit  <span class="number">1</span>)) <span class="keyword">AS</span> 客户级别,</span><br><span class="line">	(<span class="keyword">SELECT</span> pnptd <span class="keyword">FROM</span> jde_vf03012 <span class="keyword">WHERE</span>  AIAN8 <span class="operator">=</span> a.business_partner_no <span class="keyword">and</span> aico <span class="operator">=</span> E.FIDL02 limit  <span class="number">1</span>) <span class="keyword">AS</span> 结款方式,</span><br><span class="line">	H.selection_name <span class="keyword">AS</span> 月均不锈钢需求量,</span><br><span class="line">	i.selection_name <span class="keyword">AS</span> 不锈钢紧固件占比,</span><br><span class="line">	J.selection_name <span class="keyword">AS</span> 客户忠诚度,</span><br><span class="line">	G.selection_name <span class="keyword">AS</span> 客户价值级别,</span><br><span class="line">	C.lifecycle <span class="keyword">AS</span> 生命周期,</span><br><span class="line">	K.selection_name <span class="keyword">AS</span> 不锈钢库存规模,</span><br><span class="line">	C.store_details <span class="keyword">AS</span> 店面详情,</span><br><span class="line">	if((<span class="keyword">select</span> L.compete_flag <span class="keyword">from</span> business_compete_product_info L <span class="keyword">where</span> L.partner_id<span class="operator">=</span>a.id <span class="keyword">and</span>  L.delete_flag<span class="operator">=</span><span class="number">0</span> <span class="keyword">order</span> <span class="keyword">by</span> modify_time <span class="keyword">desc</span> limit <span class="number">1</span>) <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;是&#x27;</span>,<span class="string">&#x27;否&#x27;</span>) 是否竞品,</span><br><span class="line">	M.selection_name <span class="keyword">AS</span> 企业销售类型,</span><br><span class="line">	N.selection_name <span class="keyword">AS</span> 客户形态,</span><br><span class="line">	O.selection_name <span class="keyword">AS</span> 客户类型,</span><br><span class="line">	P.selection_name <span class="keyword">AS</span> 主要合作障碍,</span><br><span class="line">	Z.selection_name <span class="keyword">AS</span> 客户发展潜力 ,</span><br><span class="line">	Q.selection_name <span class="keyword">AS</span> 客户发展野心及规划,</span><br><span class="line">	R.selection_name <span class="keyword">AS</span> 市场拓客能力,</span><br><span class="line">	S.selection_name <span class="keyword">AS</span> 客户资源情况,</span><br><span class="line">	T.selection_name <span class="keyword">AS</span> 近年增长速度,</span><br><span class="line">	U.selection_name <span class="keyword">AS</span> 资金实力及信誉情况</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">	business_partner a</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> jde_vi0101 b <span class="keyword">ON</span> a.business_partner_no <span class="operator">=</span> b.fian8</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> business_customer_info c <span class="keyword">ON</span> c.partner_id <span class="operator">=</span> a.id</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> JDE_VI0101 D <span class="keyword">ON</span> A.business_partner_no <span class="operator">=</span> D.fian8</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> jde_vi0005 E <span class="keyword">ON</span> D.fiac15 <span class="operator">=</span> E.fiky </span><br><span class="line">	<span class="keyword">AND</span> E.fisy <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> </span><br><span class="line">	<span class="keyword">AND</span> E.firt <span class="operator">=</span> <span class="string">&#x27;15&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> jde_vi0005 F <span class="keyword">ON</span> a.partner_region <span class="operator">=</span> F.fiky </span><br><span class="line">	<span class="keyword">AND</span> F.fisy <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> </span><br><span class="line">	<span class="keyword">AND</span> F.firt <span class="operator">=</span> <span class="string">&#x27;13&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection G #客户价值级别</span><br><span class="line">	<span class="keyword">ON</span> G.selection_value <span class="operator">=</span> C.follow_visit_grade</span><br><span class="line">	<span class="keyword">AND</span> G.parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733892&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection H #月均不锈钢需求量</span><br><span class="line">	<span class="keyword">ON</span> H.selection_value <span class="operator">=</span> C.stainless_steel_demand_month</span><br><span class="line">	<span class="keyword">AND</span> H.parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733888&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection I #不锈钢紧固件占比</span><br><span class="line">	<span class="keyword">ON</span> I.selection_value <span class="operator">=</span> C.stainless_steel_fastener</span><br><span class="line">	<span class="keyword">AND</span> I.parent_id <span class="operator">=</span> <span class="string">&#x27;100827256377573460&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection J #客户忠诚度</span><br><span class="line">	<span class="keyword">ON</span> J.selection_value <span class="operator">=</span> C.loyalty </span><br><span class="line">	<span class="keyword">AND</span> J.parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733889&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection K #不锈钢库存规模</span><br><span class="line">	<span class="keyword">ON</span> K.selection_value <span class="operator">=</span> C.stainless_steel_scale</span><br><span class="line">	<span class="keyword">AND</span> K.parent_id <span class="operator">=</span> <span class="string">&#x27;100827256377573466&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection M #企业销售类型</span><br><span class="line">	<span class="keyword">ON</span> M.selection_value <span class="operator">=</span> C.enterprise_sale_type</span><br><span class="line">	<span class="keyword">AND</span> M.parent_id <span class="operator">=</span> <span class="string">&#x27;118561674558963735&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection N #客户形态</span><br><span class="line">	<span class="keyword">ON</span> N.selection_value <span class="operator">=</span> C.cust_form</span><br><span class="line">	<span class="keyword">AND</span> N.parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812879&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection O #客户类型</span><br><span class="line">	<span class="keyword">ON</span> O.selection_value <span class="operator">=</span> C.cust_type</span><br><span class="line">	<span class="keyword">AND</span> O.parent_id <span class="operator">=</span> <span class="string">&#x27;100827256377573495&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection P #主要合作障碍</span><br><span class="line">	<span class="keyword">ON</span> P.selection_value <span class="operator">=</span> C.major_barriers_cooperation</span><br><span class="line">	<span class="keyword">AND</span> P.parent_id <span class="operator">=</span> <span class="string">&#x27;100848383321702444&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection Q #客户发展野心及规划</span><br><span class="line">	<span class="keyword">ON</span> Q.selection_value <span class="operator">=</span> C.cust_develop_ambition_and_plan</span><br><span class="line">	<span class="keyword">AND</span> Q.parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812881&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection R #市场拓客能力</span><br><span class="line">	<span class="keyword">ON</span> R.selection_value <span class="operator">=</span> C.cust_market_develop_ability</span><br><span class="line">	<span class="keyword">AND</span> R.parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812882&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection Z # 客户发展潜力</span><br><span class="line">	<span class="keyword">ON</span> Z.selection_value <span class="operator">=</span> C.development_potential</span><br><span class="line">	<span class="keyword">AND</span> Z.parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733890&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection S #客户资源情况</span><br><span class="line">	<span class="keyword">ON</span> S.selection_value <span class="operator">=</span> C.cust_resource_situation</span><br><span class="line">	<span class="keyword">AND</span> S.parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812883&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection T #近年增长速度</span><br><span class="line">	<span class="keyword">ON</span> T.selection_value <span class="operator">=</span> C.recent_year_growth_speed</span><br><span class="line">	<span class="keyword">AND</span> T.parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812884&#x27;</span></span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_system_selection U #资金实力及信誉情况</span><br><span class="line">	<span class="keyword">ON</span> U.selection_value <span class="operator">=</span> C.financial_strength_and_reputation</span><br><span class="line">	<span class="keyword">AND</span> U.parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812885&#x27;</span></span><br><span class="line">	<span class="keyword">left</span> <span class="keyword">join</span> prd_org_organization v </span><br><span class="line">	<span class="keyword">on</span> a.ext1 <span class="operator">=</span> v.org_code</span><br><span class="line"><span class="keyword">WHERE</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span></span><br><span class="line"><span class="keyword">and</span> a.delete_flag <span class="operator">=</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">and</span> a.blacklist_flag <span class="operator">=</span> <span class="number">0</span></span><br><span class="line">#<span class="keyword">and</span> v.id <span class="keyword">in</span> (<span class="string">&#x27;93052729916653889&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>又臭又硬又长</p>
+<img src="/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/picture1.jpg" class title="This is an example image">
+
+
+<p>改良后查询速度2.6 秒</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">	a.id,</span><br><span class="line">	F.fidl01 <span class="keyword">AS</span> 区域,</span><br><span class="line">	v.org_name <span class="keyword">AS</span> 组织,</span><br><span class="line">	b.fian86 <span class="keyword">AS</span> 售至地址号,</span><br><span class="line">	a.business_partner_no <span class="keyword">AS</span> 运至地址号,</span><br><span class="line">	a.partner_name <span class="keyword">AS</span> 客户名称,</span><br><span class="line">	Y.fidl01 <span class="keyword">AS</span> 客户级别,</span><br><span class="line">	X.pnptd <span class="keyword">AS</span> 结款方式,</span><br><span class="line">	H.selection_name <span class="keyword">AS</span> 月均不锈钢需求量,</span><br><span class="line">	i.selection_name <span class="keyword">AS</span> 不锈钢紧固件占比,</span><br><span class="line">	J.selection_name <span class="keyword">AS</span> 客户忠诚度,</span><br><span class="line">	G.selection_name <span class="keyword">AS</span> 客户价值级别,</span><br><span class="line">	C.lifecycle <span class="keyword">AS</span> 生命周期,</span><br><span class="line">	K.selection_name <span class="keyword">AS</span> 不锈钢库存规模,</span><br><span class="line">	C.store_details <span class="keyword">AS</span> 店面详情,</span><br><span class="line">IF</span><br><span class="line">	( W.compete_flag <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;是&#x27;</span>, <span class="string">&#x27;否&#x27;</span> ) 是否竞品,</span><br><span class="line">	M.selection_name <span class="keyword">AS</span> 企业销售类型,</span><br><span class="line">	N.selection_name <span class="keyword">AS</span> 客户形态,</span><br><span class="line">	O.selection_name <span class="keyword">AS</span> 客户类型,</span><br><span class="line">	P.selection_name <span class="keyword">AS</span> 主要合作障碍,</span><br><span class="line">	Z.selection_name <span class="keyword">AS</span> 客户发展潜力,</span><br><span class="line">	Q.selection_name <span class="keyword">AS</span> 客户发展野心及规划,</span><br><span class="line">	R.selection_name <span class="keyword">AS</span> 市场拓客能力,</span><br><span class="line">	S.selection_name <span class="keyword">AS</span> 客户资源情况,</span><br><span class="line">	T.selection_name <span class="keyword">AS</span> 近年增长速度,</span><br><span class="line">	U.selection_name <span class="keyword">AS</span> 资金实力及信誉情况 </span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">	business_partner a</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> jde_vi0101 b <span class="keyword">ON</span> a.business_partner_no <span class="operator">=</span> b.fian8</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> business_customer_info c <span class="keyword">ON</span> c.partner_id <span class="operator">=</span> a.id</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> JDE_VI0101 D <span class="keyword">ON</span> A.business_partner_no <span class="operator">=</span> D.fian8</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> fiky, fidl01, fidl02 <span class="keyword">FROM</span> jde_vi0005 <span class="keyword">WHERE</span> fisy <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> <span class="keyword">AND</span> firt <span class="operator">=</span> <span class="string">&#x27;15&#x27;</span> ) E_INNER ) E <span class="keyword">ON</span> a.partner_region <span class="operator">=</span> E.fiky</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> fiky, fidl01, fidl02 <span class="keyword">FROM</span> jde_vi0005 <span class="keyword">WHERE</span> fisy <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> <span class="keyword">AND</span> firt <span class="operator">=</span> <span class="string">&#x27;13&#x27;</span> ) F_INNER ) F <span class="keyword">ON</span> a.partner_region <span class="operator">=</span> F.fiky</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> fiky, fidl01, fidl02 <span class="keyword">FROM</span> jde_vi0005 <span class="keyword">WHERE</span> fisy <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> <span class="keyword">AND</span> firt <span class="operator">=</span> <span class="string">&#x27;09&#x27;</span> ) Y_INNER ) Y <span class="keyword">ON</span> B.FIAC09 <span class="operator">=</span> Y.fiky</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733892&#x27;</span> ) G_INNER ) G <span class="keyword">ON</span> G.selection_value <span class="operator">=</span> C.follow_visit_grade #客户价值级别</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733888&#x27;</span> ) H_INNER ) H <span class="keyword">ON</span> H.selection_value <span class="operator">=</span> C.stainless_steel_demand_month #月均不锈钢需求量</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100827256377573460&#x27;</span> ) I_INNER ) I <span class="keyword">ON</span> I.selection_value <span class="operator">=</span> C.stainless_steel_fastener #不锈钢紧固件占比</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733889&#x27;</span> ) J_INNER ) J <span class="keyword">ON</span> J.selection_value <span class="operator">=</span> C.loyalty #客户忠诚度</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100827256377573466&#x27;</span> ) K_INNER ) K <span class="keyword">ON</span> K.selection_value <span class="operator">=</span> C.stainless_steel_scale #不锈钢库存规模</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;118561674558963735&#x27;</span> ) M_INNER ) M <span class="keyword">ON</span> M.selection_value <span class="operator">=</span> C.enterprise_sale_type #企业销售类型</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812879&#x27;</span> ) N_INNER ) N <span class="keyword">ON</span> N.selection_value <span class="operator">=</span> C.cust_form #客户形态</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100827256377573495&#x27;</span> ) O_INNER ) O <span class="keyword">ON</span> O.selection_value <span class="operator">=</span> C.cust_type #客户类型</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100848383321702444&#x27;</span> ) P_INNER ) P <span class="keyword">ON</span> P.selection_value <span class="operator">=</span> C.major_barriers_cooperation #主要合作障碍</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812881&#x27;</span> ) Q_INNER ) Q <span class="keyword">ON</span> Q.selection_value <span class="operator">=</span> C.cust_develop_ambition_and_plan #客户发展野心及规划</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812882&#x27;</span> ) R_INNER ) R <span class="keyword">ON</span> R.selection_value <span class="operator">=</span> C.cust_market_develop_ability #市场拓客能力</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;90084563917733890&#x27;</span> ) Z_INNER ) Z <span class="keyword">ON</span> Z.selection_value <span class="operator">=</span> C.development_potential # 客户发展潜力</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812883&#x27;</span> ) S_INNER ) S <span class="keyword">ON</span> S.selection_value <span class="operator">=</span> C.cust_resource_situation #客户资源情况</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812884&#x27;</span> ) T_INNER ) T <span class="keyword">ON</span> T.selection_value <span class="operator">=</span> C.recent_year_growth_speed #近年增长速度</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> parent_id, selection_value, selection_name <span class="keyword">FROM</span> prd_system_selection <span class="keyword">WHERE</span> parent_id <span class="operator">=</span> <span class="string">&#x27;100470142731812885&#x27;</span> ) U_INNER ) U <span class="keyword">ON</span> U.selection_value <span class="operator">=</span> C.financial_strength_and_reputation</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> prd_org_organization v <span class="keyword">ON</span> a.ext1 <span class="operator">=</span> v.org_code</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ( <span class="keyword">SELECT</span> partner_id, compete_flag <span class="keyword">FROM</span> business_compete_product_info <span class="keyword">WHERE</span> delete_flag <span class="operator">=</span> <span class="number">0</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> modify_time <span class="keyword">DESC</span> LIMIT <span class="number">1</span> ) W_INNER ) W <span class="keyword">ON</span> a.id <span class="operator">=</span> W.partner_id</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> jde_vf03012 X <span class="keyword">ON</span>  X.AIAN8 <span class="operator">=</span> a.business_partner_no <span class="keyword">AND</span>  X.AICO <span class="operator">=</span> E.FIDL02 </span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">	<span class="number">1</span> <span class="operator">=</span> <span class="number">1</span> </span><br><span class="line">	<span class="keyword">AND</span> a.delete_flag <span class="operator">=</span> <span class="number">0</span> </span><br><span class="line">	<span class="keyword">AND</span> a.blacklist_flag <span class="operator">=</span> <span class="number">0</span> </span><br></pre></td></tr></table></figure>
+
+<img src="/2024/06/20/Mysql%E4%BC%98%E5%8C%96%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6/picture2.png" class title="This is an example image">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/11/Linux%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="prev" title="Linux备份脚本踩坑记录">
+                  <i class="fa fa-angle-left"></i> Linux备份脚本踩坑记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Stonesmover</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">16k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">15 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
